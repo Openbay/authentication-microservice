@@ -1,13 +1,13 @@
-FROM node:14 as builder
+FROM node:16 as builder
 WORKDIR /app
 COPY ./package*.json ./
-RUN npm install npm -g
+RUN npm install npm node-gyp -g
 RUN npm install
 RUN npm rebuild bcrypt --build-from-source
 COPY . .
 RUN npm run build
 
-FROM node:14
+FROM node:16
 WORKDIR /app
 COPY --from=builder /app .
 RUN apt-get update && apt-get install sudo -y
